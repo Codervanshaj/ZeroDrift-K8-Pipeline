@@ -1,32 +1,18 @@
-apiVersion: argoproj.io/v1alpha1
+﻿apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: zero-drift-apps
+  name: zero-drift-apps-dev
   namespace: argocd
 spec:
   goTemplate: true
   generators:
-    - matrix:
-        generators:
-          - list:
-              elements:
-                - service: backend-service
-                  port: "3000"
-                - service: frontend-service
-                  port: "8080"
-          - list:
-              elements:
-                - env: dev
-                  namespace: zero-drift-dev
-                  autoSync: "true"
-                  valuesFile: values-dev.yaml
-                - env: prod
-                  namespace: zero-drift-prod
-                  autoSync: "false"
-                  valuesFile: values-prod.yaml
+    - list:
+        elements:
+          - service: backend-service
+          - service: frontend-service
   template:
     metadata:
-      name: '{{.service}}-{{.env}}'
+      name: '{{.service}}-dev'
     spec:
       project: zero-drift
       source:
@@ -36,15 +22,45 @@ spec:
         helm:
           valueFiles:
             - values.yaml
-            - '{{.valuesFile}}'
+            - values-dev.yaml
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.namespace}}'
+        namespace: zero-drift-dev
       syncPolicy:
-        {{if eq .autoSync "true"}}
         automated:
           prune: true
           selfHeal: true
-        {{end}}
+        syncOptions:
+          - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: zero-drift-apps-prod
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - list:
+        elements:
+          - service: backend-service
+          - service: frontend-service
+  template:
+    metadata:
+      name: '{{.service}}-prod'
+    spec:
+      project: zero-drift
+      source:
+        repoURL: "https://github.com/Codervanshaj/ZeroDrift-K8-Pipeline.git"
+        targetRevision: main
+        path: 'helm/{{.service}}'
+        helm:
+          valueFiles:
+            - values.yaml
+            - values-prod.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: zero-drift-prod
+      syncPolicy:
         syncOptions:
           - CreateNamespace=true

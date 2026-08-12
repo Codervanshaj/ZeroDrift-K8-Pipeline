@@ -29,17 +29,13 @@ resource "terraform_data" "deps" {
   input = var.bootstrap_dependencies
 }
 
-resource "kubernetes_manifest" "argocd_app_project" {
-  manifest = yamldecode(file(var.project_yaml_path))
+resource "null_resource" "argocd_manifests" {
   depends_on = [
     time_sleep.wait_for_argocd_crd,
     terraform_data.deps
   ]
-}
 
-resource "kubernetes_manifest" "argocd_app_set" {
-  manifest = yamldecode(file(var.applicationset_yaml_path))
-  depends_on = [
-    kubernetes_manifest.argocd_app_project
-  ]
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${var.project_yaml_path} -f ${var.applicationset_yaml_path}"
+  }
 }
