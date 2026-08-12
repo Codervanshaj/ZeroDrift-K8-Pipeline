@@ -1,0 +1,17 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: backend-cpu-stress
+spec:
+  mode: all
+  duration: "10m"
+  selector:
+    namespaces: [zero-drift-dev]
+    labelSelectors:
+      app: backend-service
+  stressors:
+    cpu:
+      workers: 2
+      load: 80
+  scheduler:
+    cron: "0 23 * * 4"    # every Thursday night

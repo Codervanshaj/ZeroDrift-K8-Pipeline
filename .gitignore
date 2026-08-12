@@ -1,13 +1,31 @@
 # Terraform
-terraform/.terraform/
-terraform/.terraform.lock.hcl
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/*.tfvars
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+.terraform.lock.hcl
 
 # Node
-app/node_modules/
+node_modules/
+dist/
+.npm/
+
+# Sealed Secrets — never commit the cluster cert
+sealed-secrets-cert.pem
+*.pem
+
+# Build artifacts
+*.log
+*.tmp
 
 # OS
 .DS_Store
 Thumbs.db
+ehthumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/

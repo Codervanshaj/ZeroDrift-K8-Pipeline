@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-platform-overview
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  platform-overview.json: |
+    {
+      "title": "Platform Overview",
+      "panels": [
+        {
+          "title": "Request Rate",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "rate(http_requests_total{namespace=\"zero-drift-prod\"}[5m])",
+              "legendFormat": "{{service}} RPS"
+            }
+          ]
+        },
+        {
+          "title": "Error Rate",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "rate(http_requests_total{status=~\"5..\"}[5m])",
+              "legendFormat": "Errors"
+            }
+          ]
+        },
+        {
+          "title": "P95 Latency",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))"
+            }
+          ]
+        },
+        {
+          "title": "Active Rollouts",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "argocd_rollout_info{phase!=\"Healthy\"}"
+            }
+          ]
+        },
+        {
+          "title": "Policy Violations",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "kyverno_policy_results_total{status=\"fail\"}"
+            }
+          ]
+        },
+        {
+          "title": "Drift Events",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "increase(argocd_app_sync_total{phase=\"Succeeded\"}[1h])"
+            }
+          ]
+        }
+      ]
+    }

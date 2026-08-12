@@ -1,17 +1,13 @@
 output "argocd_namespace" {
   description = "Namespace where ArgoCD is installed"
-  value       = kubernetes_namespace.argocd.metadata[0].name
-}
-
-output "argocd_helm_status" {
-  description = "Status of the ArgoCD Helm release"
-  value       = helm_release.argocd.status
+  value       = "argocd"
 }
 
 output "next_steps" {
   description = "How to access ArgoCD UI after terraform apply"
   value       = <<-EOT
-    ArgoCD is installed. To access the UI:
+    ArgoCD is installed along with Argo-Rollouts, Kyverno, and Sealed-Secrets. 
+    To access the UI:
 
     1. Port-forward the ArgoCD server:
        kubectl port-forward svc/argocd-server -n argocd 8080:80

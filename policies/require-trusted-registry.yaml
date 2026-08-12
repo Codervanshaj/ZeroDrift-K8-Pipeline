@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-trusted-registry
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: check-registry
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: ["zero-drift-*"]
+      validate:
+        message: "Images must come from docker.io/vanshajagarwal/ or ghcr.io"
+        pattern:
+          spec:
+            containers:
+              - image: "docker.io/vanshajagarwal/*| ghcr.io/codervanshaj/*"

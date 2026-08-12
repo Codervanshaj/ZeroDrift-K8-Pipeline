@@ -1,0 +1,5 @@
+replicaCount: 1
+canary:
+  enabled: false
+ingress:
+  host: dev.local

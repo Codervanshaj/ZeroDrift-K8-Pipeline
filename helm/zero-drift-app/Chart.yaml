@@ -1,6 +1,0 @@
-apiVersion: v2
-name: zero-drift-app
-description: Helm chart for the Zero-Drift GitOps demo application
-type: application
-version: 0.1.0
-appVersion: "1.0.0"

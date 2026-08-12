@@ -1,0 +1,15 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: backend-service-pod-failure
+  namespace: chaos-testing
+spec:
+  action: pod-kill
+  mode: one
+  duration: "30s"
+  selector:
+    namespaces: [zero-drift-dev]
+    labelSelectors:
+      app: backend-service
+  scheduler:
+    cron: "0 22 * * 1-5"    # every weeknight at 10pm

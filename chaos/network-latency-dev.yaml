@@ -1,0 +1,16 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: frontend-to-backend-latency
+spec:
+  action: delay
+  mode: all
+  duration: "5m"
+  selector:
+    namespaces: [zero-drift-dev]
+    labelSelectors:
+      app: frontend-service
+  delay:
+    latency: "300ms"    # adds 300ms to frontend → backend calls
+  scheduler:
+    cron: "30 22 * * 3"    # every Wednesday night

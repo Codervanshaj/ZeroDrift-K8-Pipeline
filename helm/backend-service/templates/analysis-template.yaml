@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate-check
+spec:
+  metrics:
+    - name: success-rate
+      interval: 60s
+      count: 3              # run 3 times
+      successCondition: result[0] >= 0.95   # 95%+ success rate required
+      failureLimit: 1       # fail immediately if any check fails
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(rate(http_requests_total{
+              service="backend-service",
+              status!~"5..",
+              version="{{ args.canary-hash }}"
+            }[5m]))
+            /
+            sum(rate(http_requests_total{
+              service="backend-service",
+              version="{{ args.canary-hash }}"
+            }[5m]))

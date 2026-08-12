@@ -1,0 +1,19 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-standard-labels
+spec:
+  background: false
+  rules:
+    - name: add-labels
+      match:
+        any:
+          - resources:
+              kinds: [Deployment, Pod, Service]
+              namespaces: ["zero-drift-*"]
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            labels:
+              managed-by: argocd
+              project: zero-drift

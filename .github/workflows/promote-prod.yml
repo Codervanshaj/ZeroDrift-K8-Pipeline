@@ -1,0 +1,38 @@
+name: Promote to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        description: 'Image tag to promote to production'
+        required: true
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update production tags
+        env:
+          TAG: ${{ github.event.inputs.image-tag }}
+        run: |
+          yq e '.image.tag = strenv(TAG)' -i helm/backend-service/values-prod.yaml
+          yq e '.image.tag = strenv(TAG)' -i helm/frontend-service/values-prod.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b promote-prod-${TAG}
+          git add helm/backend-service/values-prod.yaml helm/frontend-service/values-prod.yaml
+          git commit -m "chore: promote tag ${TAG} to production"
+          git push origin promote-prod-${TAG}
+          
+      - name: Create Pull Request
+        run: |
+          gh pr create --title "Promote tag ${{ github.event.inputs.image-tag }} to production" \
+                       --body "This PR promotes the specified image tag to the production environment." \
+                       --base main \
+                       --head promote-prod-${{ github.event.inputs.image-tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

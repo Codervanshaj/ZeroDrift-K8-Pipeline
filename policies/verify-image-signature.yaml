@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signature
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: verify-signature
+      match:
+        any:
+          - resources:
+              kinds: [Pod]
+              namespaces: ["zero-drift-*"]
+      verifyImages:
+        - imageReferences: 
+            - "docker.io/vanshajagarwal/backend-service*"
+            - "docker.io/vanshajagarwal/frontend-service*"
+          attestors:
+            - count: 1
+              entries:
+                - keyless:
+                    subject: "https://github.com/Codervanshaj/ZeroDrift-K8-Pipeline/.github/workflows/ci.yml@refs/heads/main"
+                    issuer: "https://token.actions.githubusercontent.com"

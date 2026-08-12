@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: backend-service-slo
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: backend-service-slo
+      rules:
+        - alert: ErrorBudgetBurnRate
+          expr: |
+            sum(rate(http_requests_total{status=~"5..", service="backend-service"}[1h]))
+            /
+            sum(rate(http_requests_total{service="backend-service"}[1h])) > 0.005
+          for: 5m
+          labels:
+            severity: warning
+            slo: availability
+          annotations:
+            summary: "Error budget burn rate exceeds 0.5% — SLO at risk"
+            runbook: "https://github.com/Codervanshaj/ZeroDrift-K8-Pipeline/docs/runbook.md#error-budget-burn"
+  
+        - alert: RolloutDegraded
+          expr: argocd_rollout_info{phase="Degraded"} == 1
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Argo Rollout degraded — canary likely failed analysis"
