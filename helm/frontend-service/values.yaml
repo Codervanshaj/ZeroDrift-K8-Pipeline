@@ -1,5 +1,5 @@
 image:
-  repository: vanshajagarwal/frontend-service
+  repository: docker.io/vanshajagarwal/frontend-service
   pullPolicy: IfNotPresent
   tag: "dcd329e"
 # Service
