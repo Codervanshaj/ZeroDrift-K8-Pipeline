@@ -1,7 +1,7 @@
 image:
   repository: docker.io/vanshajagarwal/backend-service
   pullPolicy: IfNotPresent
-  tag: "dcd329e"
+  tag: "e0ddc43"
 # Service
 service:
   type: ClusterIP
