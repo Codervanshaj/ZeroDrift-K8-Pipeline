@@ -16,6 +16,7 @@ spec:
         - imageReferences: 
             - "docker.io/vanshajagarwal/backend-service*"
             - "docker.io/vanshajagarwal/frontend-service*"
+          mutateDigest: false
           attestors:
             - count: 1
               entries:
