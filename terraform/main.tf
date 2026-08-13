@@ -10,7 +10,6 @@ resource "kubernetes_secret" "grafana_admin" {
     namespace = kubernetes_namespace.monitoring.metadata[0].name
   }
   data = {
-    admin-user     = "admin"
     admin-password = var.grafana_admin_password
   }
 }
