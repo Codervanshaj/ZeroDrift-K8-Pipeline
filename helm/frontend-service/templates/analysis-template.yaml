@@ -3,6 +3,8 @@ kind: AnalysisTemplate
 metadata:
   name: success-rate-check
 spec:
+  args:
+    - name: canary-hash
   metrics:
     - name: success-rate
       interval: 60s
@@ -11,15 +13,15 @@ spec:
       failureLimit: 1       # fail immediately if any check fails
       provider:
         prometheus:
-          address: http://prometheus-server.monitoring:9090
+          address: http://kube-prometheus-stack-prometheus.monitoring:9090
           query: |
             sum(rate(http_requests_total{
-              service="backend-service",
+              app="{{ .Release.Name }}",
               status!~"5..",
-              version="{{ args.canary-hash }}"
+              rollouts_pod_template_hash="{{ "{{ args.canary-hash }}" }}"
             }[5m]))
             /
             sum(rate(http_requests_total{
-              service="backend-service",
-              version="{{ args.canary-hash }}"
+              app="{{ .Release.Name }}",
+              rollouts_pod_template_hash="{{ "{{ args.canary-hash }}" }}"
             }[5m]))

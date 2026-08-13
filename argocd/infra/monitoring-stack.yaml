@@ -9,6 +9,15 @@ spec:
     repoURL: https://prometheus-community.github.io/helm-charts
     chart: kube-prometheus-stack
     targetRevision: ">=51.0.0"
+    helm:
+      values: |
+        prometheusOperator:
+          admissionWebhooks:
+            enabled: false
+          tls:
+            enabled: false
+        nodeExporter:
+          enabled: false
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
@@ -18,3 +27,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
+      - Replace=true

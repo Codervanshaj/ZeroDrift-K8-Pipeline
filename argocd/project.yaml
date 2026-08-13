@@ -10,15 +10,12 @@ spec:
     - "https://argoproj.github.io/argo-helm"
     - "https://grafana.github.io/helm-charts"
     - "https://kyverno.github.io/kyverno/"
+    - "https://charts.chaos-mesh.org"
   destinations:
-    - namespace: "zero-drift-*"    # wildcard — covers dev and prod
-      server: https://kubernetes.default.svc
-    - namespace: monitoring
+    - namespace: "*"
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
-    - group: ""
-      kind: Namespace
-    - group: "monitoring.coreos.com"
+    - group: "*"
       kind: "*"
   roles:
     - name: readonly
