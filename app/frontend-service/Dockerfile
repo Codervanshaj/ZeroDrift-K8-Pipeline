@@ -15,7 +15,7 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
-COPY server.js instrumentation.js ./
+COPY server.js instrumentation.cjs ./
 
 # Git identity injection
 ARG GIT_COMMIT=unknown
@@ -31,4 +31,4 @@ ENV GIT_COMMIT=$GIT_COMMIT \
 
 EXPOSE 8080
 
-CMD ["node", "--require", "./instrumentation.js", "server.js"]
+CMD ["node", "--require", "./instrumentation.cjs", "server.js"]

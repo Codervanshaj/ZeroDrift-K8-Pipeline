@@ -19,12 +19,12 @@ spec:
         - pause: {duration: 2m}
         - analysis:
             templates:
-              - templateName: success-rate-check
+              - templateName: {{ .Release.Name }}-success-rate-check
         - setWeight: 50      # if analysis passed: 50% traffic
         - pause: {duration: 2m}
         - analysis:
             templates:
-              - templateName: success-rate-check
+              - templateName: {{ .Release.Name }}-success-rate-check
       {{- end }}
   template:
     metadata:

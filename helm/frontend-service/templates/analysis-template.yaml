@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: success-rate-check
+  name: {{ .Release.Name }}-success-rate-check
 spec:
   args:
     - name: canary-hash
