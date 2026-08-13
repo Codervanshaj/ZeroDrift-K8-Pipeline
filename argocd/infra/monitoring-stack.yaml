@@ -18,6 +18,9 @@ spec:
             enabled: false
         nodeExporter:
           enabled: false
+        grafana:
+          admin:
+            existingSecret: "grafana-admin-secret"
   destination:
     namespace: monitoring
     server: https://kubernetes.default.svc
