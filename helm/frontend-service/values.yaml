@@ -1,12 +1,14 @@
 image:
-  repository: vanshajagarwal/frontend-service
+  repository: vanshajagarwal/frontend-service   
   pullPolicy: IfNotPresent
-  tag: "3565474"
+  tag: "29fc007"
+
 # Service
 service:
   type: ClusterIP
   port: 80
-  targetPort: 3000
+  targetPort: 8080
+
 # Resource limits
 resources:
   requests:
@@ -15,20 +17,24 @@ resources:
   limits:
     cpu: "250m"
     memory: "256Mi"
+
 # Environment variables passed to the container
 env:
   APP_VERSION: "v1.0.0"
   FORCE_ERRORS: "false"
+  BACKEND_URL: "http://backend-service-stable"
+
 # Liveness / Readiness probes 
 livenessProbe:
   httpGet:
-    path: /
-    port: 3000
+    path: /healthz
+    port: 8080
   initialDelaySeconds: 10
   periodSeconds: 15
+
 readinessProbe:
   httpGet:
-    path: /
-    port: 3000
+    path: /readyz
+    port: 8080
   initialDelaySeconds: 5
   periodSeconds: 10

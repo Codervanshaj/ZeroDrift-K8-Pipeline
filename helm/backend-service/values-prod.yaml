@@ -3,5 +3,3 @@ canary:
   enabled: true
 ingress:
   host: prod.local
-image:
-  tag: a3f9c13

@@ -13,9 +13,6 @@ spec:
     canary:
       canaryService: {{ .Release.Name }}-canary   # routes canary traffic
       stableService: {{ .Release.Name }}-stable    # routes stable traffic
-      trafficRouting:
-        nginx:
-          stableIngress: {{ .Release.Name }}-stable
       {{- if .Values.canary.enabled }}
       steps:
         - setWeight: 10      # send 10% traffic to new version
@@ -45,6 +42,12 @@ spec:
               value: {{ .Values.env.APP_VERSION | quote }}
             - name: FORCE_ERRORS
               value: {{ .Values.env.FORCE_ERRORS | quote | default "false" }}
+            - name: BACKEND_URL
+              value: {{ .Values.env.BACKEND_URL | quote }}
+            - name: ROLLOUTS_POD_TEMPLATE_HASH
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['rollouts-pod-template-hash']
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           livenessProbe:

@@ -3,3 +3,5 @@ canary:
   enabled: false
 ingress:
   host: dev.local
+env:
+  BACKEND_URL: "http://backend-service-dev-stable"

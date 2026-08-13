@@ -8,6 +8,8 @@ spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}
+  targetLabels:
+    - rollouts-pod-template-hash
   endpoints:
     - port: http
       path: /metrics

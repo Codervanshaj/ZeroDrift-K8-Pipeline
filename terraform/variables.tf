@@ -15,3 +15,17 @@ variable "argocd_chart_version" {
   type        = string
   default     = "6.7.3"  # https://artifacthub.io/packages/helm/argo/argo-cd
 }
+
+variable "grafana_admin_password" {
+  description = "Grafana admin dashboard password"
+  type        = string
+  default     = "AdminPass123!"
+  sensitive   = true
+}
+
+variable "slack_notifications_token" {
+  description = "Slack notifications API token or webhook URL placeholder"
+  type        = string
+  default     = "dummy-token"
+  sensitive   = true
+}

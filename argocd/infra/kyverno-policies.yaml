@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: chaos-mesh
+  name: kyverno-policies
   namespace: argocd
 spec:
   project: zero-drift
   source:
-    repoURL: https://charts.chaos-mesh.org
-    chart: chaos-mesh
-    targetRevision: ">=2.6.0"
+    repoURL: "https://github.com/Codervanshaj/ZeroDrift-K8-Pipeline.git"
+    targetRevision: main
+    path: policies
   destination:
-    namespace: chaos-testing
     server: https://kubernetes.default.svc
+    namespace: kyverno
   syncPolicy:
     automated:
       prune: true

@@ -1,20 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kyverno
+  name: infra-apps
   namespace: argocd
 spec:
   project: zero-drift
   source:
-    repoURL: https://kyverno.github.io/kyverno/
-    chart: kyverno
-    targetRevision: ">=3.0.0"
+    repoURL: "https://github.com/Codervanshaj/ZeroDrift-K8-Pipeline.git"
+    targetRevision: main
+    path: argocd/infra
   destination:
-    namespace: kyverno
     server: https://kubernetes.default.svc
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true

@@ -3,5 +3,5 @@ canary:
   enabled: true
 ingress:
   host: prod.local
-image:
-  tag: a3f9c13
+env:
+  BACKEND_URL: "http://backend-service-prod-stable"
