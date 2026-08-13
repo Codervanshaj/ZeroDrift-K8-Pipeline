@@ -18,7 +18,7 @@ resources:
 # Environment variables passed to the container
 env:
   APP_VERSION: "v1.0.0"
-  FORCE_ERRORS: "true"
+  FORCE_ERRORS: "false"
 # Liveness / Readiness probes 
 livenessProbe:
   httpGet:
