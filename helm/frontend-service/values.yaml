@@ -1,7 +1,7 @@
 image:
   repository: docker.io/vanshajagarwal/frontend-service
   pullPolicy: IfNotPresent
-  tag: "e5eec61"
+  tag: "3fb6332"
 # Service
 service:
   type: ClusterIP
