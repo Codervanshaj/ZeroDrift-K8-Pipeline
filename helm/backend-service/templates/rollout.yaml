@@ -20,11 +20,19 @@ spec:
         - analysis:
             templates:
               - templateName: {{ .Release.Name }}-success-rate-check
+            args:
+              - name: canary-hash
+                valueFrom:
+                  podTemplateHashValue: Latest
         - setWeight: 50      # if analysis passed: 50% traffic
         - pause: {duration: 2m}
         - analysis:
             templates:
               - templateName: {{ .Release.Name }}-success-rate-check
+            args:
+              - name: canary-hash
+                valueFrom:
+                  podTemplateHashValue: Latest
       {{- end }}
   template:
     metadata:
