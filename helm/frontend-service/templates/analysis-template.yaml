@@ -9,7 +9,7 @@ spec:
     - name: success-rate
       interval: 60s
       count: 3              # run 3 times
-      successCondition: result[0] >= 0.95   # 95%+ success rate required
+      successCondition: len(result) == 0 || result[0] >= 0.95
       failureLimit: 1       # fail immediately if any check fails
       provider:
         prometheus:

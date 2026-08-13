@@ -1,2 +1,0 @@
-FROM vanshajagarwal/backend-service:f315fd6
-COPY server.js /app/server.js
