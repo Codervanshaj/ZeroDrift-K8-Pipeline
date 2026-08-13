@@ -81,7 +81,8 @@ app.get('/metrics', async (req, res) => {
 });
 
 // Proxy API requests to backend
-app.use('/api', createProxyMiddleware({
+app.use(createProxyMiddleware({
+  pathFilter: '/api',
   target: backendUrl,
   changeOrigin: true,
   logProvider: () => logger,
@@ -91,7 +92,7 @@ app.use('/api', createProxyMiddleware({
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Fallback to index.html for React Router
-app.get('*all', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 

@@ -46,7 +46,7 @@ app.use((req, res, next) => {
   res.on('finish', () => {
     const duration = Date.now() - start;
     const durationSeconds = duration / 1000;
-    
+
     // Labels matching our ServiceMonitor rollouts targetLabels and app config
     const labels = {
       app: process.env.SERVICE_NAME || 'backend-service',
